@@ -1,0 +1,20 @@
+:root {
+  --font-color: #cdd5e0;
+  --background-color: #364153;
+  --secondary-font-color: #4a5567;
+  --card-color-1: #111729;
+  --card-color-2: #1d1b48;
+  --active-outline-color: #3662e3;
+  --main-background-color: #20293a;
+}
+
+body {
+  background-color: var(--background-color);
+  font-family: "Outfit", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
