@@ -1,20 +1,35 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import HeroImage from "./assets/hero-image-github-profile.png";
 
 function App() {
+  const [username, setUsername] = useState("");
+  const [bio, setBio] = useState("");
+  const [followers, setFollowers] = useState("");
+  const [following, setFollowing] = useState("");
+  const [location, setLocation] = useState("none");
+
   const fetchData = async (username = "github") => {
+    const token = process.env.REACT_APP_GITHUB_TOKEN;
     try {
-      const response = await fetch(`https://api.github.com/users/${username}`);
+      const response = await fetch(`https://api.github.com/users/${username}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
-      console.log(`${data.name} — ${data.bio}`);
+      setUsername(data.name);
+      data.bio ? setBio(data.bio) : setBio(`${username} has no bio.`);
+      setFollowers(data.followers);
+      setFollowing(data.following);
+      data.location ? setLocation(data.location) : setLocation("none");
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData("tnydv");
   }, []);
 
   return (
@@ -32,14 +47,14 @@ function App() {
       </div>
       {/* Followers, Following, Location */}
       <div className="prrofile-info">
-        <div className="info-card">Followers</div>
-        <div className="info-card">Following</div>
-        <div className="info-card">Location</div>
+        <div className="info-card">Followers | {followers}</div>
+        <div className="info-card">Following | {following}</div>
+        <div className="info-card">Location | {location}</div>
       </div>
       {/* Username */}
-      <h1 className="username">GitHub</h1>
+      <h1 className="username">{username}</h1>
       {/* Profile Bio */}
-      <p className="bio">How people build software.</p>
+      <p className="bio">{bio}</p>
       {/* Top Repository Cards */}
       <div className="repo-card">
         <h3 className="repo-name">.github</h3>
@@ -53,7 +68,7 @@ function App() {
         <span className="repo-updated">updated 4 days ago</span>
       </div>
       {/* View all Repo link */}
-      <a className="repos-link" href="https://github.com/github">
+      <a className="repos-link" href={`https://github.com/${username}`}>
         View all repositories
       </a>
     </div>
